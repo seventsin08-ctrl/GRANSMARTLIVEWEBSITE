@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/platform";
 import { headers } from "next/headers";
 
 const enc = new TextEncoder();

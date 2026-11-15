@@ -7,7 +7,7 @@ import { BulkMenuImport } from "../components/bulk-menu-import";
 import { InteractiveStorePreview } from "../components/interactive-store-preview";
 import { AttendanceAdmin } from "../components/attendance-admin";
 
-type Product={id:string;category_id:string;name:string;description:string;price:number;image:string;available:number;customization:number;custom_options?:MenuOptionGroup[];soldOut?:boolean};
+type Product={id:string;category_id:string;name:string;description:string;price:number;image:string;available:number;customization:number;custom_options?:MenuOptionGroup[];soldOut?:boolean;soldOutReason?:string};
 type Category={id:string;name:string;active:number};
 type CartLine={id:string;name:string;qty:number;price:number;image:string;category:string;customization:{size:string;sugar:string;toppings:string[];options?:Record<string,string|string[]>}};
 const money=(n:number)=>new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP",maximumFractionDigits:0}).format(n);

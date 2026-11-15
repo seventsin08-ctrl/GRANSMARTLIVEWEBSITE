@@ -1,3 +1,4 @@
+import type { D1Database } from "@/lib/platform";
 export const normalizeCardCode=(value:string)=>String(value||"").toUpperCase().replace(/\s/g,"");
 export async function cardHash(code:string){return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(normalizeCardCode(code))))).map(x=>x.toString(16).padStart(2,"0")).join("")}
 export async function readSettings(db:D1Database){const all=await db.prepare("SELECT key,value FROM settings").all<any>();return Object.fromEntries(all.results.map((r:any)=>[r.key,r.value]))}

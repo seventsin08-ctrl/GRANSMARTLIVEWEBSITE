@@ -1,10 +1,10 @@
-import { env } from "cloudflare:workers";
+import { env, clientIp } from "@/lib/platform";
 import { NextResponse } from "next/server";
 import { makeSession } from "../session";
 
 export async function POST(request: Request) {
   if (!env.DB || !env.ADMIN_PASSWORD_HASH || !env.ADMIN_SESSION_SECRET) return NextResponse.json({ error: "Admin sign-in is not configured." }, { status: 503 });
-  const ip = request.headers.get("cf-connecting-ip") || "unknown";
+  const ip = clientIp(request);
   const ipHash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip)))).map(x => x.toString(16).padStart(2, "0")).join("");
   const recent = await env.DB.prepare("SELECT COUNT(*) AS n FROM login_attempts WHERE ip_hash = ? AND succeeded=0 AND attempted_at > ?").bind(ipHash, Date.now() - 15 * 60 * 1000).first<{ n: number }>();
   if ((recent?.n || 0) >= 8) return NextResponse.json({ error: "Too many tries. Wait 15 minutes and try again." }, { status: 429 });

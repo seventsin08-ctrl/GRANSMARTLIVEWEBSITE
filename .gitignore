@@ -32,7 +32,7 @@ yarn-error.log*
 *.pem
 
 # Checkout-local tool state
-/.wrangler/
+/.netlify/
 /.sites-runtime/
 
 # Workspace scaffolding and publication archives

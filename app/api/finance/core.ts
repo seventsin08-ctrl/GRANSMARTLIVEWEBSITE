@@ -1,3 +1,4 @@
+import type { D1Database } from "@/lib/platform";
 export async function ensureFinanceSchema(db: D1Database) {
   await db.batch([
     db.prepare("CREATE TABLE IF NOT EXISTS product_costs (product_id TEXT PRIMARY KEY NOT NULL, unit_cost REAL NOT NULL, updated_at TEXT NOT NULL)"),

@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env, clientIp } from "@/lib/platform";
 import { NextResponse } from "next/server";
 
 async function signOrderTrackingToken(id: string) {
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   const { code } = await request.json().catch(() => ({ code: "" }));
   const number = String(code || "").trim().replace(/^#/, "");
   if (!/^\d{4}$/.test(number)) return NextResponse.json({ error: "Enter the four digit code shown on your receipt." }, { status: 400 });
-  const ip = request.headers.get("cf-connecting-ip") || "unknown";
+  const ip = clientIp(request);
   const ipHash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip)))).map(x => x.toString(16).padStart(2, "0")).join("");
   const now = Date.now();
   await env.DB.prepare("CREATE TABLE IF NOT EXISTS order_tracking_attempts (ip_hash TEXT NOT NULL, attempted_at INTEGER NOT NULL)").run();

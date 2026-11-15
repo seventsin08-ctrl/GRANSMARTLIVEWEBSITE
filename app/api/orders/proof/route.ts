@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/platform";
 import { NextResponse } from "next/server";
 import { getAdminSession, hasAdminSession } from "../../admin/session";
 

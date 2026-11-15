@@ -19,12 +19,5 @@ export function parseMenuOptions(value: unknown): MenuOptionGroup[] {
 }
 
 export async function ensureProductOptionsColumn(db: any) {
-  const columns = await db.prepare("PRAGMA table_info(products)").all<any>();
-  if (!(columns.results || []).some((column: any) => column.name === "custom_options")) {
-    try { await db.prepare("ALTER TABLE products ADD COLUMN custom_options TEXT NOT NULL DEFAULT '[]'").run(); }
-    catch (error) {
-      const current = await db.prepare("PRAGMA table_info(products)").all<any>();
-      if (!(current.results || []).some((column: any) => column.name === "custom_options")) throw error;
-    }
-  }
+  await db.prepare("ALTER TABLE products ADD COLUMN IF NOT EXISTS custom_options TEXT NOT NULL DEFAULT '[]'").run();
 }
